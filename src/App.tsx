@@ -20,6 +20,7 @@ const App = () => {
 
   return (
     <>
+      <h1>Wheel of Life</h1>
       <Wheel
         categories={categories}
         selectedCategory={selectedCategory}
