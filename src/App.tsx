@@ -50,10 +50,14 @@ const renderCustomizedLabel = ({
     <text
       x={cx + radius * Math.cos(-midAngle * RADIAN)}
       y={cy + radius * Math.sin(-midAngle * RADIAN)}
-      fill="white"
+      fill={index === 5 ? 'yellow' : 'white'}
       textAnchor="middle"
       dominantBaseline="central"
-      style={{ fontSize: '16px' }}
+      style={
+        index === 5
+          ? { fontSize: '16px', fontWeight: 'bold' }
+          : { fontSize: '16px' }
+      }
     >
       {categories[index]}
     </text>
@@ -72,6 +76,11 @@ const App = () => (
         <Cell
           key={`cell-${index}`}
           fill={colorPalette[index % colorPalette.length]}
+          style={
+            index === 5
+              ? { stroke: 'yellow', strokeWidth: 2 }
+              : { opacity: 0.9 }
+          }
         />
       ))}
     </Pie>
