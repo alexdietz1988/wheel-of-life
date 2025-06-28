@@ -59,7 +59,10 @@ const App = () => {
         dominantBaseline="central"
         style={
           index === selectedCategory
-            ? { fontSize: '16px', fontWeight: 'bold' }
+            ? {
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }
             : { fontSize: '16px' }
         }
       >
@@ -96,11 +99,7 @@ const App = () => {
           <Cell
             key={`cell-${index}`}
             fill={colorPalette[index % colorPalette.length]}
-            style={
-              index === selectedCategory
-                ? { stroke: 'yellow', strokeWidth: 2 }
-                : { stroke: 'white', strokeWidth: 2, opacity: 0.9 }
-            }
+            style={index === selectedCategory ? {} : { opacity: 0.8 }}
             onClick={() => setSelectedCategory(index)}
           />
         ))}
