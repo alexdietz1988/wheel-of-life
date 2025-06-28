@@ -1,3 +1,5 @@
+import * as Styled from './EditCategories.styles';
+
 interface EditCategoriesProps {
   categories: string[];
   setCategories: React.Dispatch<React.SetStateAction<string[]>>;
@@ -16,18 +18,32 @@ const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
       }
     }}
   >
-    <input type="text" name="simpleInput" placeholder="Add a category..." />
-    <button type="submit">Submit</button>
+    <Styled.AddCategoryField>
+      <input
+        type="text"
+        className="form-control"
+        name="simpleInput"
+        placeholder="Add a category..."
+      />
+      <button
+        className="btn btn-success"
+        type="submit"
+      >
+        Submit
+      </button>
+    </Styled.AddCategoryField>
+
     {categories.map((category, i) => (
-      <div key={i} style={{ marginTop: 8 }}>
-        <span style={{ marginRight: 8 }}>{category}</span>
+      <div key={i} style={{ margin: '1rem' }}>
+        <span style={{ marginRight: '1rem' }}>{category}</span>
         <button
           type="button"
+          className="btn btn-sm btn-danger"
           onClick={() => {
             setCategories((prev) => prev.filter((_, index) => index !== i));
           }}
         >
-          Remove
+          -
         </button>
       </div>
     ))}
