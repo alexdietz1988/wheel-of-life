@@ -47,7 +47,7 @@ const App = () => {
     midAngle: number;
     index: number;
   }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const radius = 25 + innerRadius + (outerRadius - innerRadius) * 0.5;
     const RADIAN = Math.PI / 180;
 
     return (
