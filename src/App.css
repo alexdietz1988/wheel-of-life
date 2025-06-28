@@ -1,0 +1,8 @@
+input,
+button {
+  border: 1px solid black;
+}
+
+input {
+  margin-inline-end: 0.5rem;
+}

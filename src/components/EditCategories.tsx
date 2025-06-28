@@ -16,15 +16,8 @@ const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
       }
     }}
   >
-    <input
-      type="text"
-      name="simpleInput"
-      placeholder="Add a category..."
-      style={{ border: '1px solid black' }}
-    />
-    <button type="submit" style={{ border: '1px solid black' }}>
-      Submit
-    </button>
+    <input type="text" name="simpleInput" placeholder="Add a category..." />
+    <button type="submit">Submit</button>
     {categories.map((category, i) => (
       <div key={i} style={{ marginTop: 8 }}>
         <span style={{ marginRight: 8 }}>{category}</span>
@@ -33,7 +26,6 @@ const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
           onClick={() => {
             setCategories((prev) => prev.filter((_, index) => index !== i));
           }}
-          style={{ border: '1px solid black' }}
         >
           Remove
         </button>
