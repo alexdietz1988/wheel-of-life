@@ -1,4 +1,4 @@
-import { Pie, PieChart, Cell, LabelList } from 'recharts';
+import { Pie, PieChart, Cell } from 'recharts';
 
 const colorPalette = [
   'hsl(10, 80%, 50%)',
@@ -22,13 +22,11 @@ const categories = [
   'home',
 ];
 
-const chartData = categories.map((category, i) => ({
+const data = categories.map((category, i) => ({
   name: category,
   value: 1,
   fill: colorPalette[i % colorPalette.length],
 }));
-
-console.log('chartData', chartData);
 
 const renderCustomizedLabel = ({
   cx,
@@ -36,42 +34,38 @@ const renderCustomizedLabel = ({
   midAngle,
   innerRadius,
   outerRadius,
-  percent,
   index,
+}: {
+  cx: number;
+  cy: number;
+  outerRadius: number;
+  innerRadius: number;
+  midAngle: number;
+  index: number;
 }) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const RADIAN = Math.PI / 180;
 
   return (
     <text
-      x={x}
-      y={y}
+      x={cx + radius * Math.cos(-midAngle * RADIAN)}
+      y={cy + radius * Math.sin(-midAngle * RADIAN)}
       fill="white"
-      textAnchor={x > cx ? 'start' : 'end'}
+      textAnchor="middle"
       dominantBaseline="central"
+      style={{ fontSize: '16px' }}
     >
-      {`${(percent * 100).toFixed(0)}%`}
+      {categories[index]}
     </text>
   );
 };
 
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
-
-const RADIAN = Math.PI / 180;
-
 const App = () => (
-  <PieChart data={chartData} width={500} height={500}>
-    <LabelList dataKey="name" position="center" fill="black" />
+  <PieChart data={data} width={500} height={500}>
     <Pie
-      data={chartData}
-      dataKey="value"
-      nameKey="category"
+      data={data}
+      labelLine={false}
+      // @ts-expect-error suppress Recharts type error
       label={renderCustomizedLabel}
     >
       {data.map((entry, index) => (
