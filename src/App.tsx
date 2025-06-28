@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pie, PieChart, Cell } from 'recharts';
 
 const colorPalette = [
@@ -28,63 +29,68 @@ const data = categories.map((category, i) => ({
   fill: colorPalette[i % colorPalette.length],
 }));
 
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  index,
-}: {
-  cx: number;
-  cy: number;
-  outerRadius: number;
-  innerRadius: number;
-  midAngle: number;
-  index: number;
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const RADIAN = Math.PI / 180;
+const App = () => {
+  const [selectedCategory, setSelectedCategory] = useState<null | number>(null);
+
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    index,
+  }: {
+    cx: number;
+    cy: number;
+    outerRadius: number;
+    innerRadius: number;
+    midAngle: number;
+    index: number;
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const RADIAN = Math.PI / 180;
+
+    return (
+      <text
+        x={cx + radius * Math.cos(-midAngle * RADIAN)}
+        y={cy + radius * Math.sin(-midAngle * RADIAN)}
+        fill={index === selectedCategory ? 'yellow' : 'white'}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={
+          index === selectedCategory
+            ? { fontSize: '16px', fontWeight: 'bold' }
+            : { fontSize: '16px' }
+        }
+      >
+        {categories[index]}
+      </text>
+    );
+  };
 
   return (
-    <text
-      x={cx + radius * Math.cos(-midAngle * RADIAN)}
-      y={cy + radius * Math.sin(-midAngle * RADIAN)}
-      fill={index === 5 ? 'yellow' : 'white'}
-      textAnchor="middle"
-      dominantBaseline="central"
-      style={
-        index === 5
-          ? { fontSize: '16px', fontWeight: 'bold' }
-          : { fontSize: '16px' }
-      }
-    >
-      {categories[index]}
-    </text>
+    <PieChart data={data} width={500} height={500}>
+      <Pie
+        data={data}
+        labelLine={false}
+        // @ts-expect-error suppress Recharts type error
+        label={renderCustomizedLabel}
+      >
+        {data.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={colorPalette[index % colorPalette.length]}
+            style={
+              index === selectedCategory
+                ? { stroke: 'yellow', strokeWidth: 2 }
+                : { opacity: 0.9 }
+            }
+            onClick={() => setSelectedCategory(index)}
+          />
+        ))}
+      </Pie>
+    </PieChart>
   );
 };
-
-const App = () => (
-  <PieChart data={data} width={500} height={500}>
-    <Pie
-      data={data}
-      labelLine={false}
-      // @ts-expect-error suppress Recharts type error
-      label={renderCustomizedLabel}
-    >
-      {data.map((entry, index) => (
-        <Cell
-          key={`cell-${index}`}
-          fill={colorPalette[index % colorPalette.length]}
-          style={
-            index === 5
-              ? { stroke: 'yellow', strokeWidth: 2 }
-              : { opacity: 0.9 }
-          }
-        />
-      ))}
-    </Pie>
-  </PieChart>
-);
 
 export default App;
