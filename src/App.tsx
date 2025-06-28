@@ -14,22 +14,21 @@ const colorPalette = [
   'hsl(180, 40%, 50%)',
 ];
 
-const categories = [
-  'work',
-  'relationships',
-  'health',
-  'personal',
-  'hobbies',
-  'home',
-];
-
-const data = categories.map((category, i) => ({
-  name: category,
-  value: 1,
-  fill: colorPalette[i % colorPalette.length],
-}));
-
 const App = () => {
+  const [categories, setCategories] = useState<string[]>([
+    'work',
+    'relationships',
+    'health',
+    'personal',
+    'hobbies',
+    'home',
+  ]);
+
+  const data = categories.map((category, i) => ({
+    name: category,
+    value: 1,
+    fill: colorPalette[i % colorPalette.length],
+  }));
   const [selectedCategory, setSelectedCategory] = useState<null | number>(null);
 
   const renderCustomizedLabel = ({
@@ -88,23 +87,61 @@ const App = () => {
   }, [selectedCategory]);
 
   return (
-    <PieChart data={data} width={500} height={500}>
-      <Pie
-        data={data}
-        labelLine={false}
-        // @ts-expect-error suppress Recharts type error
-        label={renderCustomizedLabel}
+    <>
+      <PieChart data={data} width={500} height={500}>
+        <Pie
+          data={data}
+          labelLine={false}
+          // @ts-expect-error suppress Recharts type error
+          label={renderCustomizedLabel}
+        >
+          {data.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={colorPalette[index % colorPalette.length]}
+              style={index === selectedCategory ? {} : { opacity: 0.8 }}
+              onClick={() => setSelectedCategory(index)}
+            />
+          ))}
+        </Pie>
+      </PieChart>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const input = e.currentTarget.elements.namedItem(
+            'simpleInput'
+          ) as HTMLInputElement;
+          if (input) {
+            setCategories((prev) => [...prev, input.value]);
+            input.value = '';
+          }
+        }}
       >
-        {data.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            fill={colorPalette[index % colorPalette.length]}
-            style={index === selectedCategory ? {} : { opacity: 0.8 }}
-            onClick={() => setSelectedCategory(index)}
-          />
+        <input
+          type="text"
+          name="simpleInput"
+          placeholder="Add a category..."
+          style={{ border: '1px solid black' }}
+        />
+        <button type="submit" style={{ border: '1px solid black' }}>
+          Submit
+        </button>
+        {categories.map((category, i) => (
+          <div key={i} style={{ marginTop: 8 }}>
+            <span style={{ marginRight: 8 }}>{category}</span>
+            <button
+              type="button"
+              onClick={() => {
+                setCategories((prev) => prev.filter((_, index) => index !== i));
+              }}
+              style={{ border: '1px solid black' }}
+            >
+              Remove
+            </button>
+          </div>
         ))}
-      </Pie>
-    </PieChart>
+      </form>
+    </>
   );
 };
 
