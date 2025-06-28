@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Pie, PieChart, Cell } from 'recharts';
 
 const colorPalette = [
@@ -68,6 +68,22 @@ const App = () => {
     );
   };
 
+  useEffect(() => {
+    const savedCategory = localStorage.getItem('selectedCategory');
+    if (!savedCategory) return;
+    const parsed = parseInt(savedCategory);
+    if (!Number.isNaN(parsed)) {
+      setSelectedCategory(parsed);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'selectedCategory',
+      selectedCategory?.toString() || 'null'
+    );
+  }, [selectedCategory]);
+
   return (
     <PieChart data={data} width={500} height={500}>
       <Pie
@@ -83,7 +99,7 @@ const App = () => {
             style={
               index === selectedCategory
                 ? { stroke: 'yellow', strokeWidth: 2 }
-                : { opacity: 0.9 }
+                : { stroke: 'white', strokeWidth: 2, opacity: 0.9 }
             }
             onClick={() => setSelectedCategory(index)}
           />
