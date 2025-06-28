@@ -1,12 +1,4 @@
-import { type ChartConfig } from '@/components/ui/chart';
-import { Pie, PieChart } from 'recharts';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
-} from '@/components/ui/chart';
+import { Pie, PieChart, Cell, LabelList } from 'recharts';
 
 const colorPalette = [
   'hsl(10, 80%, 50%)',
@@ -31,35 +23,65 @@ const categories = [
 ];
 
 const chartData = categories.map((category, i) => ({
-  category,
+  name: category,
   value: 1,
   fill: colorPalette[i % colorPalette.length],
 }));
 
-const chartConfig: ChartConfig = Object.fromEntries(
-  categories.map((category) => [
-    category,
-    { label: category.charAt(0).toUpperCase() + category.slice(1) },
-  ])
-);
+console.log('chartData', chartData);
+
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const data = [
+  { name: 'Group A', value: 400 },
+  { name: 'Group B', value: 300 },
+  { name: 'Group C', value: 300 },
+  { name: 'Group D', value: 200 },
+];
+
+const RADIAN = Math.PI / 180;
 
 const App = () => (
-  <ChartContainer
-    config={chartConfig}
-    className="mx-auto aspect-square max-h-[250px]"
-  >
-    <PieChart>
-      <ChartTooltip
-        cursor={false}
-        content={<ChartTooltipContent hideLabel />}
-      />
-      <Pie data={chartData} dataKey="value" nameKey="category" />
-      <ChartLegend
-        content={<ChartLegendContent nameKey="category" payload={null} />}
-        className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
-      />
-    </PieChart>
-  </ChartContainer>
+  <PieChart data={chartData} width={500} height={500}>
+    <LabelList dataKey="name" position="center" fill="black" />
+    <Pie
+      data={chartData}
+      dataKey="value"
+      nameKey="category"
+      label={renderCustomizedLabel}
+    >
+      {data.map((entry, index) => (
+        <Cell
+          key={`cell-${index}`}
+          fill={colorPalette[index % colorPalette.length]}
+        />
+      ))}
+    </Pie>
+  </PieChart>
 );
 
 export default App;
