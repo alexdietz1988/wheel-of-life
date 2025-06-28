@@ -1,4 +1,5 @@
 import { Pie, PieChart, Cell } from 'recharts';
+import * as Styled from './Wheel.styles';
 
 const colorPalette = [
   'hsl(10, 80%, 50%)',
@@ -59,29 +60,33 @@ const Wheel = ({
               }
             : { fontSize: '16px' }
         }
+        onClick={() => setSelectedCategory(index)}
       >
         {categories[index]}
       </text>
     );
   };
   return (
-    <PieChart data={data} width={500} height={500}>
-      <Pie
-        data={data}
-        labelLine={false}
-        // @ts-expect-error suppress Recharts type error
-        label={renderCustomizedLabel}
-      >
-        {data.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            fill={colorPalette[index % colorPalette.length]}
-            style={index === selectedCategory ? {} : { opacity: 0.8 }}
-            onClick={() => setSelectedCategory(index)}
-          />
-        ))}
-      </Pie>
-    </PieChart>
+    <Styled.Wheel>
+      <PieChart data={data} width={500} height={500} onClick={() => null}>
+        <Pie
+          data={data}
+          labelLine={false}
+          // @ts-expect-error suppress Recharts type error
+          label={renderCustomizedLabel}
+          isAnimationActive={false}
+        >
+          {data.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={colorPalette[index % colorPalette.length]}
+              style={index === selectedCategory ? {} : { opacity: 0.8 }}
+              onClick={() => setSelectedCategory(index)}
+            />
+          ))}
+        </Pie>
+      </PieChart>
+    </Styled.Wheel>
   );
 };
 
