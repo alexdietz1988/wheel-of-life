@@ -9,4 +9,14 @@ export const Wheel = styled.div`
     cursor: pointer;
     opacity: 0.8;
   }
+
+  text {
+    font-size: 16px;
+    fill: white;
+
+    &.is-selected {
+      font-weight: bold;
+      fill: yellow;
+    }
+  }
 `;

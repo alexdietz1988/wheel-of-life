@@ -16,15 +16,29 @@ const colorPalette = [
   'hsl(180, 40%, 50%)',
 ];
 
-const Wheel = ({
-  data,
-  setData,
-}: {
+interface renderCustomizedLabelProps {
+  cx: number;
+  cy: number;
+  outerRadius: number;
+  innerRadius: number;
+  midAngle: number;
+  index: number;
+}
+
+interface WheelProps {
   data: Data;
   setData: React.Dispatch<React.SetStateAction<Data>>;
-}) => {
+}
+
+const Wheel = ({ data, setData }: WheelProps) => {
   const { categories, selectedCategory } = data;
   const [disableAnimation, setDisableAnimation] = useState(false);
+  const updateSelectedCategory = (index: number) => {
+    setData((prev) => ({
+      ...prev,
+      selectedCategory: index,
+    }));
+  };
   useEffect(() => {
     setTimeout(() => setDisableAnimation(true), 2000);
   }, []);
@@ -33,44 +47,21 @@ const Wheel = ({
     setTimeout(() => setDisableAnimation(true), 2000);
   }, [categories]);
 
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    index,
-  }: {
-    cx: number;
-    cy: number;
-    outerRadius: number;
-    innerRadius: number;
-    midAngle: number;
-    index: number;
-  }) => {
-    const radius = 25 + innerRadius + (outerRadius - innerRadius) * 0.5;
+  const renderCustomizedLabel = (props: renderCustomizedLabelProps) => {
+    const radius =
+      25 + props.innerRadius + (props.outerRadius - props.innerRadius) * 0.5;
     const RADIAN = Math.PI / 180;
 
     return (
       <text
-        x={cx + radius * Math.cos(-midAngle * RADIAN)}
-        y={cy + radius * Math.sin(-midAngle * RADIAN)}
-        fill={index === selectedCategory ? 'yellow' : 'white'}
+        x={props.cx + radius * Math.cos(-props.midAngle * RADIAN)}
+        y={props.cy + radius * Math.sin(-props.midAngle * RADIAN)}
         textAnchor="middle"
         dominantBaseline="central"
-        style={
-          index === selectedCategory
-            ? {
-                fontSize: '16px',
-                fontWeight: 'bold',
-              }
-            : { fontSize: '16px' }
-        }
-        onClick={() =>
-          setData((prev) => ({ ...prev, selectedCategory: index }))
-        }
+        className={props.index === selectedCategory ? 'is-selected' : ''}
+        onClick={() => updateSelectedCategory(props.index)}
       >
-        {categories[index].name}
+        {categories[props.index].name}
       </text>
     );
   };
@@ -89,9 +80,7 @@ const Wheel = ({
               key={`cell-${index}`}
               fill={colorPalette[index % colorPalette.length]}
               style={index === selectedCategory ? {} : { opacity: 0.8 }}
-              onClick={() =>
-                setData((prev) => ({ ...prev, selectedCategory: index }))
-              }
+              onClick={() => updateSelectedCategory(index)}
             />
           ))}
         </Pie>
