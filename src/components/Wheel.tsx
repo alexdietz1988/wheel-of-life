@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Pie, PieChart, Cell } from 'recharts';
 import * as Styled from './Wheel.styles';
 
@@ -23,6 +24,10 @@ const Wheel = ({
   selectedCategory: number | null;
   setSelectedCategory: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
+  const [disableAnimation, setDisableAnimation] = useState(false);
+  useEffect(() => {
+    setTimeout(() => setDisableAnimation(true), 2000);
+  }, []);
   const data = categories.map((category) => ({
     name: category,
     value: 1,
@@ -74,7 +79,7 @@ const Wheel = ({
           labelLine={false}
           // @ts-expect-error suppress Recharts type error
           label={renderCustomizedLabel}
-          isAnimationActive={false}
+          isAnimationActive={!disableAnimation}
         >
           {data.map((entry, index) => (
             <Cell
