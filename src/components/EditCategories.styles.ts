@@ -1,16 +1,27 @@
 import styled from 'styled-components';
 
-export const AddCategoryField = styled.div`
+export const Form = styled.form`
   width: 250px;
   margin-inline: auto;
-  margin-bottom: 1rem;
 
-  display: flex;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h6 {
+      margin-block-end: 0.5rem;
+    }
+  }
 `;
 
+export const AddCategoryField = styled.div``;
+
 export const DeleteCategorySection = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
 `;
