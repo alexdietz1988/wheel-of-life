@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { getSavedCategory, setSavedCategory } from './App.helpers';
 import EditCategories from './components/EditCategories';
 import Wheel from './components/Wheel';
-import './App.css';
+import * as Styled from './App.styles';
 
 const App = () => {
   const [categories, setCategories] = useState<string[]>([
@@ -19,15 +19,17 @@ const App = () => {
   useEffect(() => setSavedCategory(selectedCategory), [selectedCategory]);
 
   return (
-    <>
+    <Styled.Container>
       <h1>Wheel of Life</h1>
-      <Wheel
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-      <EditCategories categories={categories} setCategories={setCategories} />
-    </>
+      <Styled.Content>
+        <Wheel
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+        <EditCategories categories={categories} setCategories={setCategories} />
+      </Styled.Content>
+    </Styled.Container>
   );
 };
 
