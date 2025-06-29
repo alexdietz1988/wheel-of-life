@@ -25,28 +25,25 @@ const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
         name="simpleInput"
         placeholder="Add a category..."
       />
-      <button
-        className="btn btn-success"
-        type="submit"
-      >
+      <button className="btn btn-success" type="submit">
         Submit
       </button>
     </Styled.AddCategoryField>
 
-    {categories.map((category, i) => (
-      <div key={i} style={{ margin: '1rem' }}>
-        <span style={{ marginRight: '1rem' }}>{category}</span>
+    <Styled.DeleteCategorySection>
+      {categories.map((category, i) => (
         <button
+          key={i}
           type="button"
           className="btn btn-sm btn-danger"
-          onClick={() => {
-            setCategories((prev) => prev.filter((_, index) => index !== i));
-          }}
+          onClick={() =>
+            setCategories((prev) => prev.filter((_, index) => index !== i))
+          }
         >
-          -
+          {category} x
         </button>
-      </div>
-    ))}
+      ))}
+    </Styled.DeleteCategorySection>
   </form>
 );
 
