@@ -31,14 +31,14 @@ const EditCategories = ({ data, setData }: EditCategoriesProps) => (
     <div className="card-body">
       <Styled.AddCategoryField>
         <h6>Add a new category</h6>
-        <div className="input-group">
+        <div className="input-group input-group-sm">
           <input
             type="text"
             className="form-control"
             name="simpleInput"
             placeholder="New category..."
           />
-          <button className="btn btn-success" type="submit">
+          <button className="btn btn-sm btn-success" type="submit">
             Add
           </button>
         </div>
