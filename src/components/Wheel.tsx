@@ -28,6 +28,10 @@ const Wheel = ({
   useEffect(() => {
     setTimeout(() => setDisableAnimation(true), 2000);
   }, []);
+  useEffect(() => {
+    setDisableAnimation(false);
+    setTimeout(() => setDisableAnimation(true), 2000);
+  }, [categories])
   const data = categories.map((category) => ({
     name: category,
     value: 1,
