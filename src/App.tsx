@@ -5,15 +5,31 @@ import EditCategories from './components/EditCategories';
 import Wheel from './components/Wheel';
 import * as Styled from './App.styles';
 
+export interface Data {
+  categories: { name: string; value: number; subcategories: string[] }[];
+  selectedCategory: number | null;
+  clickedCategory: number | null;
+}
+
+const initialCategories = [
+  'work',
+  'relationships',
+  'health',
+  'personal',
+  'hobbies',
+  'home',
+].map((category) => ({
+  name: category,
+  value: 1,
+  subcategories: [],
+}));
+
 const App = () => {
-  const [categories, setCategories] = useState<string[]>([
-    'work',
-    'relationships',
-    'health',
-    'personal',
-    'hobbies',
-    'home',
-  ]);
+  const [data, setData] = useState<Data>({
+    categories: initialCategories,
+    selectedCategory: null,
+    clickedCategory: null,
+  });
   const [selectedCategory, setSelectedCategory] = useState<null | number>(null);
   useEffect(() => getSavedCategory(setSelectedCategory), []);
   useEffect(() => setSavedCategory(selectedCategory), [selectedCategory]);
@@ -22,12 +38,8 @@ const App = () => {
     <Styled.Container>
       <h1>Wheel of Life</h1>
       <Styled.Content>
-        <Wheel
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-        <EditCategories categories={categories} setCategories={setCategories} />
+        <Wheel data={data} setData={setData} />
+        <EditCategories data={data} setData={setData} />
       </Styled.Content>
     </Styled.Container>
   );

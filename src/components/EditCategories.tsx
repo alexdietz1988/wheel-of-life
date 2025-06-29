@@ -1,11 +1,12 @@
 import * as Styled from './EditCategories.styles';
+import { type Data } from '@/App';
 
 interface EditCategoriesProps {
-  categories: string[];
-  setCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  data: Data;
+  setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
-const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
+const EditCategories = ({ data, setData }: EditCategoriesProps) => (
   <Styled.Form
     className="card"
     onSubmit={(e) => {
@@ -14,7 +15,15 @@ const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
         'simpleInput'
       ) as HTMLInputElement;
       if (input) {
-        setCategories((prev) => [...prev, input.value]);
+        {
+          setData((prev) => ({
+            ...prev,
+            categories: [
+              ...prev.categories,
+              { name: input.value, value: 1, subcategories: [] },
+            ],
+          }));
+        }
         input.value = '';
       }
     }}
@@ -38,16 +47,19 @@ const EditCategories = ({ categories, setCategories }: EditCategoriesProps) => (
       <Styled.DeleteCategorySection>
         <h6>Delete a category</h6>
         <div>
-          {categories.map((category, i) => (
+          {data.categories.map((category, i) => (
             <button
               key={i}
               type="button"
               className="btn btn-sm btn-danger"
               onClick={() =>
-                setCategories((prev) => prev.filter((_, index) => index !== i))
+                setData((prev) => ({
+                  ...prev,
+                  categories: prev.categories.filter((_, index) => index !== i),
+                }))
               }
             >
-              {category} x
+              {category.name} x
             </button>
           ))}
         </div>

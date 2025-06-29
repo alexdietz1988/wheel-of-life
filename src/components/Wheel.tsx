@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Pie, PieChart, Cell } from 'recharts';
 import * as Styled from './Wheel.styles';
+import { type Data } from '@/App';
 
 const colorPalette = [
   'hsl(10, 80%, 50%)',
@@ -16,14 +17,13 @@ const colorPalette = [
 ];
 
 const Wheel = ({
-  categories,
-  selectedCategory,
-  setSelectedCategory,
+  data,
+  setData,
 }: {
-  categories: string[];
-  selectedCategory: number | null;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<number | null>>;
+  data: Data;
+  setData: React.Dispatch<React.SetStateAction<Data>>;
 }) => {
+  const { categories, selectedCategory } = data;
   const [disableAnimation, setDisableAnimation] = useState(false);
   useEffect(() => {
     setTimeout(() => setDisableAnimation(true), 2000);
@@ -31,11 +31,8 @@ const Wheel = ({
   useEffect(() => {
     setDisableAnimation(false);
     setTimeout(() => setDisableAnimation(true), 2000);
-  }, [categories])
-  const data = categories.map((category) => ({
-    name: category,
-    value: 1,
-  }));
+  }, [categories]);
+
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -69,28 +66,32 @@ const Wheel = ({
               }
             : { fontSize: '16px' }
         }
-        onClick={() => setSelectedCategory(index)}
+        onClick={() =>
+          setData((prev) => ({ ...prev, selectedCategory: index }))
+        }
       >
-        {categories[index]}
+        {categories[index].name}
       </text>
     );
   };
   return (
     <Styled.Wheel>
-      <PieChart data={data} width={500} height={500} onClick={() => null}>
+      <PieChart data={categories} width={500} height={500} onClick={() => null}>
         <Pie
-          data={data}
+          data={categories}
           labelLine={false}
           // @ts-expect-error suppress Recharts type error
           label={renderCustomizedLabel}
           isAnimationActive={!disableAnimation}
         >
-          {data.map((entry, index) => (
+          {categories.map((entry, index: number) => (
             <Cell
               key={`cell-${index}`}
               fill={colorPalette[index % colorPalette.length]}
               style={index === selectedCategory ? {} : { opacity: 0.8 }}
-              onClick={() => setSelectedCategory(index)}
+              onClick={() =>
+                setData((prev) => ({ ...prev, selectedCategory: index }))
+              }
             />
           ))}
         </Pie>
