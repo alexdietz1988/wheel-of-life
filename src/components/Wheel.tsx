@@ -78,9 +78,9 @@ const Wheel = ({ data, setData }: WheelProps) => {
           {categories.map((entry, index: number) => (
             <Cell
               key={`cell-${index}`}
-              fill={colorPalette[index % colorPalette.length]}
-              style={index === selectedCategory ? {} : { opacity: 0.8 }}
               onClick={() => updateSelectedCategory(index)}
+              fill={colorPalette[index % colorPalette.length]}
+              className={index === selectedCategory ? 'is-selected' : ''}
             />
           ))}
         </Pie>

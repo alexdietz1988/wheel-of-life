@@ -5,18 +5,29 @@ export const Wheel = styled.div`
     outline: none;
   }
 
-  & > * > * > * > *:hover {
-    cursor: pointer;
-    opacity: 0.8;
+  .recharts-pie-sector {
+    opacity: 0.9;
+
+    &:hover,
+    &:has(.is-selected) {
+      opacity: 1;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   text {
-    font-size: 16px;
     fill: white;
 
     &.is-selected {
       font-weight: bold;
       fill: yellow;
+    }
+    &:hover {
+      cursor: pointer;
+      font-size: 1.1rem;
     }
   }
 `;
