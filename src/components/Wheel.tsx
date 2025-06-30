@@ -75,7 +75,7 @@ const Wheel = ({ data, setData }: WheelProps) => {
           label={renderCustomizedLabel}
           isAnimationActive={!disableAnimation}
         >
-          {categories.map((entry, index: number) => (
+          {categories.map((_entry, index: number) => (
             <Cell
               key={`cell-${index}`}
               onClick={() => updateSelectedCategory(index)}
